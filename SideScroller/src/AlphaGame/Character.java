@@ -26,20 +26,29 @@ public class Character {
 	*/
 	int dy;
 	
+	int left;
+	
+	
+	
 	/** 
 	*   The variable holding the reference to the character image
 	*/
 	Image still;
+	ImageIcon i;
+	ImageIcon j;
 	
 	
 	/**
 	*	The constructor that assigns the mario image to the "still" variable and places the initial character in the bottom left corner of the screen
 	*/
 	public Character(){
+		i = new ImageIcon("Images/Character/stillTwo.png");
+		j = new ImageIcon("Images/Character/jumpTwo.png");
 		
-		ImageIcon i = new ImageIcon("Mario.png");
+		
 		still = i.getImage();
-		x = -15;
+		x = 0;
+		left = 150;
 		y = 250;
 	}
 	
@@ -47,14 +56,7 @@ public class Character {
 	 * 	Changes the "x" position of the character by adding change in "x" to "x"
 	 */
 	public void move(){
-		x = x + dx;
-	}
-	/**
-	 * 	Changes the "y" position of the character by adding change in "y" to "y"
-	 *  NOT WORKING YET
-	 */
-	public void jump(){
-		y = y + dy;
+		x = x+dx;
 	}
 	
 	/**
@@ -71,6 +73,10 @@ public class Character {
 	 */
 	public int getY(){
 		return y;
+	}
+
+	public int getdx(){
+		return dx;
 	}
 	
 	/**
@@ -89,13 +95,14 @@ public class Character {
 		int key = e.getKeyCode();
 		
 		if(key == KeyEvent.VK_LEFT){
-			dx = -3;
+			dx = -1;
 		}
 		if(key == KeyEvent.VK_RIGHT){
-			dx = 3;
+			dx = 1;
 		}
 		if(key == KeyEvent.VK_UP){
-			dy = -3;
+			dy = 1;
+			still = j.getImage();
 		}
 	}
 	
@@ -114,7 +121,7 @@ public class Character {
 		}
 		if(key == KeyEvent.VK_UP){
 			dy = 0;
-			//y = 250;
+			//still = i.getImage();
 		}
 	}
 }
