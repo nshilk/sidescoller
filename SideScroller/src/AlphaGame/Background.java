@@ -47,7 +47,7 @@ public class Background extends JPanel implements ActionListener, Runnable {
 		guy = new Character();
 		addKeyListener(new AL());
 		setFocusable(true);
-		ImageIcon i = new ImageIcon("Images/Levels/mTest.png");
+		ImageIcon i = new ImageIcon("Images/Levels/testA.png");
 		background = i.getImage();
 		time = new Timer(5, this);
 		time.start();
