@@ -35,10 +35,25 @@ public class Background extends JPanel implements ActionListener, Runnable {
 	boolean k = false;
 	boolean h = false;
 	boolean done = false;
+	int i;
 	/** 
 	*   Variable holding the current x coordinate of the background image
 	*/
 	int backX;
+	int holeStart[];
+	int holeEnd[];
+	final static int holeSize = 108;
+	
+	holeStart = new int[3];
+	holeEnd = new int[3];
+	holeStart[0] = 200;
+	holeStart[1] = 600;
+	holeStart[2] = 900;
+	holeEnd[0] = holeStart[0] + holeSize;
+	holeEnd[1] = holeStart[1] + holeSize;
+	holeEnd[2] = holeStart[2] + holeSize;
+	
+	
 	
 	/** 
 	*   Constructs the new Background object with a timer, a new character object, and an action listener
@@ -59,7 +74,19 @@ public class Background extends JPanel implements ActionListener, Runnable {
 	public void actionPerformed(ActionEvent e){
 		guy.move();
 		backX = backX - 1;
+		
+		for (i=0; i< 3; i++) {
+			holeStart[i] = holeStart[i] - 1;
+			holeEnd[i] = holeEnd[i] - 1;
+		}
+		for (i=0; i< 3; i++) {
+			if (getX() >= holeStart[i] && getX() <= holeEnd[i]) {
+			y = 440;
+				
+			}
+		}
 		repaint();
+		
 	}
 	
 	/** 
