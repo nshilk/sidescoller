@@ -7,6 +7,7 @@ package AlphaGame;
 import java.awt.*;
 import java.awt.Image;
 import java.awt.event.*;
+import java.nio.file.*;
 
 import javax.swing.*;
 
@@ -27,7 +28,7 @@ public class Background extends JPanel implements ActionListener, Runnable {
 	*   The creation of a "timer" object, time
 	*/
 	Timer time;
-	int v=256;
+	int v=225;
 	
 	
 	Thread animator;
@@ -40,6 +41,18 @@ public class Background extends JPanel implements ActionListener, Runnable {
 	*/
 	int backX;
 	
+	
+	int[] holeStart = new int[3];
+	int[] holeEnd = new int[3];
+	
+	int i;
+	final static int holeSize = 108;
+	
+	
+	Path wall1 = Paths.get("Images/Levels/testA.png");
+	
+	
+	
 	/** 
 	*   Constructs the new Background object with a timer, a new character object, and an action listener
 	*/
@@ -47,18 +60,41 @@ public class Background extends JPanel implements ActionListener, Runnable {
 		guy = new Character();
 		addKeyListener(new AL());
 		setFocusable(true);
-		ImageIcon i = new ImageIcon("Images/Levels/testA.png");
+		ImageIcon i = new ImageIcon(wall1.toString());
 		background = i.getImage();
 		time = new Timer(5, this);
 		time.start();
+		
+		
+		holeStart[0] = 455;
+		holeStart[1] = 9999;
+		holeStart[2] = 9900;
+		holeEnd[0] = holeStart[0] + holeSize;
+		holeEnd[1] = holeStart[1] + holeSize;
+		holeEnd[2] = holeStart[2] + holeSize;
 	}
 	
 	/** 
 	*   Holds the methods that are performed every time the timer "ticks"
 	*/
 	public void actionPerformed(ActionEvent e){
+	/*	guy.move();
+		backX = backX - 1;
+		repaint();*/
+		
 		guy.move();
 		backX = backX - 1;
+		
+		for (i=0; i< 3; i++) {
+			holeStart[i] = holeStart[i] - 1;
+			holeEnd[i] = holeEnd[i] - 1;
+		}
+		for (i=0; i< 3; i++) {
+			if (getX() >= holeStart[i] && getX() <= holeEnd[i] && v == 225) {
+			v = 440;
+				
+			}
+		}
 		repaint();
 	}
 	
@@ -126,13 +162,13 @@ public class Background extends JPanel implements ActionListener, Runnable {
 			v--;
 		}
 		
-		if(v==200){
+		if(v==175){
 			h = true;
 			
 		}
-		if(h==true && v<=256){
+		if(h==true && v<=225){
 			v++;
-			if(v==256){
+			if(v==225){
 				done = true;
 				guy.still = guy.i.getImage();
 			}

@@ -5,6 +5,7 @@ package AlphaGame;
 */
 import java.awt.Image;
 import java.awt.event.KeyEvent;
+import java.nio.file.*;
 
 import javax.swing.ImageIcon;
 
@@ -37,14 +38,15 @@ public class Character {
 	ImageIcon i;
 	ImageIcon j;
 	
+	Path still1 = Paths.get("Images/Character/stillTwo.png");
+	Path jump1 = Paths.get("Images/Character/jumpTwo.png");
 	
 	/**
 	*	The constructor that assigns the mario image to the "still" variable and places the initial character in the bottom left corner of the screen
 	*/
 	public Character(){
-		i = new ImageIcon("Images/Character/stillTwo.png");
-		j = new ImageIcon("Images/Character/jumpTwo.png");
-		
+		i = new ImageIcon(still1.toString());
+		j = new ImageIcon(jump1.toString());
 		
 		still = i.getImage();
 		x = 0;
