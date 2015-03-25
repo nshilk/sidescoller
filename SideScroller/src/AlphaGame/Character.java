@@ -50,6 +50,7 @@ public class Character {
 
 		still = i.getImage();
 		x = 0;
+		
 		left = 150;
 		y = 250;
 	}

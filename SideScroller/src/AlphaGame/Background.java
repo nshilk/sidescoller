@@ -64,10 +64,12 @@ public class Background extends JPanel implements ActionListener, Runnable {
 	 */
 	public Background() throws FileNotFoundException{
 		guy = new Character();
+		
 		addKeyListener(new AL());
 		setFocusable(true);
 		ImageIcon i = new ImageIcon(wall1.toString());
 		background = i.getImage();
+		
 		time = new Timer(1, this);
 		time.start();
 
@@ -79,6 +81,7 @@ public class Background extends JPanel implements ActionListener, Runnable {
 		Scanner scan = new Scanner(file);
 
 		int i=0;
+		
 		holes = scan.nextInt();
 		holeStart = new int[holes];
 		holeEnd = new int[holes];
@@ -87,6 +90,7 @@ public class Background extends JPanel implements ActionListener, Runnable {
 			holeStart[i]=scan.nextInt();
 			holeEnd[i]=holeStart[i]+holeSize;
 		}
+		
 		scan.close();
 	}
 

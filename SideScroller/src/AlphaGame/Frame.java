@@ -17,7 +17,6 @@ public class Frame {
 		frame.setSize(800, 448);
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
-
 	}
 
 	public static void main(String[] args) throws FileNotFoundException{
