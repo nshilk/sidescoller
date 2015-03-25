@@ -52,6 +52,16 @@ public class Background extends JPanel implements ActionListener, Runnable {
 	int i;
 	final static int holeSize = 108;
 	int holes;
+	int redBoxes = 2;
+	int[] redBoxStart;
+	int[] redBoxEnd;
+	
+	
+	
+	
+	
+	static final int boxHeight = 27;  
+	static final int boxWidth = 27;
 
 
 	Path wall1 = Paths.get("Images/Levels/firstLevel.png");
@@ -64,13 +74,20 @@ public class Background extends JPanel implements ActionListener, Runnable {
 	 */
 	public Background() throws FileNotFoundException{
 		guy = new Character();
+		redBoxStart = new int[2];
+		redBoxEnd = new int[2];
+		redBoxStart[0] = 227;
+		redBoxStart[1] = 1873;
+		redBoxEnd[0] = 227+boxWidth;
+		redBoxEnd[1] = 1873 + boxWidth;
+		
 		
 		addKeyListener(new AL());
 		setFocusable(true);
 		ImageIcon i = new ImageIcon(wall1.toString());
 		background = i.getImage();
 		
-		time = new Timer(1, this);
+		time = new Timer(10, this);
 		time.start();
 
 		holeInit();
@@ -91,6 +108,13 @@ public class Background extends JPanel implements ActionListener, Runnable {
 			holeEnd[i]=holeStart[i]+holeSize;
 		}
 		
+		/*redBoxes = scan.nextInt();
+		
+		for(i=0;i<redBoxes;++i){
+			redBoxStart[i]=scan.nextInt();
+			redBoxEnd[i]=holeStart[i]+boxWidth;
+		}*/
+		
 		scan.close();
 	}
 
@@ -107,6 +131,13 @@ public class Background extends JPanel implements ActionListener, Runnable {
 		for (i=0; i<holes; i++) {
 			holeStart[i] = holeStart[i]-1-guy.getdx();
 			holeEnd[i] = holeEnd[i]-1-guy.getdx();
+			
+		}
+		
+		for (i=0; i<2; i++) {
+			redBoxStart[i] = redBoxStart[i]-1-guy.getdx();
+			redBoxEnd[i] = redBoxEnd[i]-1-guy.getdx();
+			
 		}
 		for (i=0; i<holes; i++) {
 			if (getX() >= holeStart[i]-50 && getX() <= holeEnd[i]-50 && v == 225) {
@@ -115,6 +146,15 @@ public class Background extends JPanel implements ActionListener, Runnable {
 
 			}
 		}
+		for (i=0; i<2; i++) {
+			if (getX() >= redBoxStart[i]-50 && getX() <= redBoxEnd[i]-50 && v >= 225 - boxHeight) {
+				v = 440;
+				failure=true;
+
+			}
+		}
+		
+		
 		repaint();
 	}
 
