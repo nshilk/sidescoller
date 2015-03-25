@@ -1,13 +1,15 @@
 package AlphaGame;
 /** 
-*   The class containing the changes for the background
-*   @author Team Two
-*/
+ *   The class containing the changes for the background
+ *   @author Team Two
+ */
 
 import java.awt.*;
-import java.awt.Image;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.nio.file.*;
+import java.util.Scanner;
 
 import javax.swing.*;
 
@@ -17,111 +19,125 @@ public class Background extends JPanel implements ActionListener, Runnable {
 	 */
 	private static final long serialVersionUID = 1L;
 	/** 
-	*   The creation of a "Character" object, guy
-	*/
+	 *   The creation of a "Character" object, guy
+	 */
 	Character guy;
 	/** 
-	*   The variable reference to the background image
-	*/
+	 *   The variable reference to the background image
+	 */
 	public Image background;
 	/** 
-	*   The creation of a "timer" object, time
-	*/
+	 *   The creation of a "timer" object, time
+	 */
 	Timer time;
 	int v=225;
-	
-	
+
+
 	Thread animator;
-	
+
 	boolean k = false;
 	boolean h = false;
 	boolean done = false;
+
+	boolean failure = false;
 	/** 
-	*   Variable holding the current x coordinate of the background image
-	*/
+	 *   Variable holding the current x coordinate of the background image
+	 */
 	int backX;
-	
-	
-	int[] holeStart = new int[3];
-	int[] holeEnd = new int[3];
-	
+
+
+	int[] holeStart;
+	int[] holeEnd;
+
 	int i;
 	final static int holeSize = 108;
-	
-	
-	Path wall1 = Paths.get("Images/Levels/testA.png");
-	
-	
-	
+	int holes;
+
+
+	Path wall1 = Paths.get("Images/Levels/firstLevel.png");
+	Path level = Paths.get("Images/Levels/Level1.txt");
+
+
 	/** 
-	*   Constructs the new Background object with a timer, a new character object, and an action listener
-	*/
-	public Background(){
+	 *   Constructs the new Background object with a timer, a new character object, and an action listener
+	 * @throws FileNotFoundException 
+	 */
+	public Background() throws FileNotFoundException{
 		guy = new Character();
 		addKeyListener(new AL());
 		setFocusable(true);
 		ImageIcon i = new ImageIcon(wall1.toString());
 		background = i.getImage();
-		time = new Timer(5, this);
+		time = new Timer(1, this);
 		time.start();
-		
-		
-		holeStart[0] = 455;
-		holeStart[1] = 9999;
-		holeStart[2] = 9900;
-		holeEnd[0] = holeStart[0] + holeSize;
-		holeEnd[1] = holeStart[1] + holeSize;
-		holeEnd[2] = holeStart[2] + holeSize;
+
+		holeInit();
 	}
-	
-	/** 
-	*   Holds the methods that are performed every time the timer "ticks"
-	*/
-	public void actionPerformed(ActionEvent e){
-	/*	guy.move();
-		backX = backX - 1;
-		repaint();*/
-		
-		guy.move();
-		backX = backX - 1;
-		
-		for (i=0; i< 3; i++) {
-			holeStart[i] = holeStart[i] - 1;
-			holeEnd[i] = holeEnd[i] - 1;
+
+	private void holeInit() throws FileNotFoundException{
+		File file = new File(level.toString());    
+		Scanner scan = new Scanner(file);
+
+		int i=0;
+		holes = scan.nextInt();
+		holeStart = new int[holes];
+		holeEnd = new int[holes];
+
+		for(i=0;i<holes;++i){
+			holeStart[i]=scan.nextInt();
+			holeEnd[i]=holeStart[i]+holeSize;
 		}
-		for (i=0; i< 3; i++) {
-			if (getX() >= holeStart[i] && getX() <= holeEnd[i] && v == 225) {
-			v = 440;
-				
+		scan.close();
+	}
+
+	/** 
+	 *   Holds the methods that are performed every time the timer "ticks"
+	 */
+	public void actionPerformed(ActionEvent e){
+
+		guy.move();
+
+
+		backX = backX - 1;
+
+		for (i=0; i<holes; i++) {
+			holeStart[i] = holeStart[i]-1-guy.getdx();
+			holeEnd[i] = holeEnd[i]-1-guy.getdx();
+		}
+		for (i=0; i<holes; i++) {
+			if (getX() >= holeStart[i]-50 && getX() <= holeEnd[i]-50 && v == 225) {
+				v = 440;
+				failure=true;
+
 			}
 		}
 		repaint();
 	}
-	
+
 	/** 
-	*   Creates a 2D graphics object and is used to paint the new screen every time it is called
-	*/
-	
-	
+	 *   Creates a 2D graphics object and is used to paint the new screen every time it is called
+	 */
+
+
 	public void paint(Graphics g){
-		if(guy.dy == 1 && k==false ){
+		if(guy.dy == 1 && !k &&!failure){
 			k = true;
 			animator = new Thread(this);
 			animator.start();
 		}
-		
+
 		super.paint(g);
-		
+
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.drawImage(background, backX, 0, null);
-			
+
 		g2d.drawImage(guy.getImage(), guy.getX(), v, null);
-			
+
 	}
-	
+
 	/** 
-	*   Extension of the KeyAdapter using the key methods in the Character class
-	*/
+	 *   Extension of the KeyAdapter using the key methods in the Character class
+	 */
 	private class AL extends KeyAdapter{
 		public void keyReleased(KeyEvent e){
 			guy.keyReleased(e);
@@ -130,43 +146,43 @@ public class Background extends JPanel implements ActionListener, Runnable {
 			guy.keyPressed(e);
 		}
 	}
-	
+
 	public void run(){
 		long beforeTime, timeDiff, sleep;
-		
+
 		beforeTime = System.currentTimeMillis();
-		while(done==false){
-			
+		while(!done){
+
 			cycle();
-			
+
 			timeDiff = System.currentTimeMillis()-beforeTime;
 			sleep = 10 - timeDiff;
 			if(sleep < 0){
 				sleep = 2;
 			}
 			try{
-					Thread.sleep(sleep);
+				Thread.sleep(sleep);
 			} catch(InterruptedException e){
-				
+
 			}
 			beforeTime = System.currentTimeMillis();
-			}
+		}
 		done = false;
 		k = false;
 		h = false;
 	}
-	
+
 
 	public void cycle(){
-		if (h==false){
+		if (!h){
 			v--;
 		}
-		
+
 		if(v==175){
 			h = true;
-			
+
 		}
-		if(h==true && v<=225){
+		if(h && v<=225){
 			v++;
 			if(v==225){
 				done = true;

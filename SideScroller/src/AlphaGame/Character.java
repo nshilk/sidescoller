@@ -1,8 +1,8 @@
 package AlphaGame;
 /** 
-*   The class containing the methods and variables for the character on the screen
-*   @author Team Two
-*/
+ *   The class containing the methods and variables for the character on the screen
+ *   @author Team Two
+ */
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.nio.file.*;
@@ -11,56 +11,57 @@ import javax.swing.ImageIcon;
 
 public class Character {
 	/** 
-	*   The "x" coordinate of the character
-	*/
+	 *   The "x" coordinate of the character
+	 */
 	int x;
 	/** 
-	*   The "y" coordinate of the character
-	*/
+	 *   The "y" coordinate of the character
+	 */
 	int y;
 	/** 
-	*   The change in "x"
-	*/
+	 *   The change in "x"
+	 */
 	int dx;
 	/** 
-	*   The change in "y"
-	*/
+	 *   The change in "y"
+	 */
 	int dy;
-	
+
 	int left;
-	
-	
-	
+
+
+
 	/** 
-	*   The variable holding the reference to the character image
-	*/
+	 *   The variable holding the reference to the character image
+	 */
 	Image still;
 	ImageIcon i;
 	ImageIcon j;
-	
+
 	Path still1 = Paths.get("Images/Character/stillTwo.png");
 	Path jump1 = Paths.get("Images/Character/jumpTwo.png");
-	
+
 	/**
-	*	The constructor that assigns the mario image to the "still" variable and places the initial character in the bottom left corner of the screen
-	*/
+	 *	The constructor that assigns the mario image to the "still" variable and places the initial character in the bottom left corner of the screen
+	 */
 	public Character(){
 		i = new ImageIcon(still1.toString());
 		j = new ImageIcon(jump1.toString());
-		
+
 		still = i.getImage();
 		x = 0;
 		left = 150;
 		y = 250;
 	}
-	
+
 	/**
 	 * 	Changes the "x" position of the character by adding change in "x" to "x"
 	 */
 	public void move(){
 		x = x+dx;
+
 	}
-	
+
 	/**
 	 * 	Returns the current value of x
 	 * @return x
@@ -68,7 +69,7 @@ public class Character {
 	public int getX(){
 		return x;
 	}
-	
+
 	/**
 	 * 	Returns the current value of y
 	 * @return y
@@ -80,7 +81,7 @@ public class Character {
 	public int getdx(){
 		return dx;
 	}
-	
+
 	/**
 	 * 	Returns the current image of the character
 	 * @return still
@@ -88,14 +89,14 @@ public class Character {
 	public Image getImage(){
 		return still;
 	}
-	
+
 	/**
 	 * @param e
 	 * 	Changes the value of dx (change in x) when a key is pressed
 	 */
 	public void keyPressed(KeyEvent e){
 		int key = e.getKeyCode();
-		
+
 		if(key == KeyEvent.VK_LEFT){
 			dx = -1;
 		}
@@ -107,14 +108,14 @@ public class Character {
 			still = j.getImage();
 		}
 	}
-	
+
 	/**
 	 * @param e
 	 * 	Changes the value of dx (change in x) back to 0 when a key is released
 	 */
 	public void keyReleased(KeyEvent e){
 		int key = e.getKeyCode();
-		
+
 		if(key == KeyEvent.VK_LEFT){
 			dx = 0;
 		}
