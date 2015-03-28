@@ -38,8 +38,8 @@ public class Character {
 	ImageIcon i;
 	ImageIcon j;
 
-	Path still1 = Paths.get("Images/Character/stillTwo.png");
-	Path jump1 = Paths.get("Images/Character/jumpTwo.png");
+	Path still1 = Paths.get("Resources/Images/Character/stillTwo.png");
+	Path jump1 = Paths.get("Resources/Images/Character/jumpTwo.png");
 
 	/**
 	 *	The constructor that assigns the mario image to the "still" variable and places the initial character in the bottom left corner of the screen
