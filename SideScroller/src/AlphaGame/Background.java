@@ -14,45 +14,58 @@ import java.util.Scanner;
 import javax.swing.*;
 
 public class Background extends JPanel implements ActionListener, Runnable {
-
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
-
+	/** 
+	 *   The creation of a "Character" object, guy
+	 */
 	Character guy;
+	/** 
+	 *   The variable reference to the background image
+	 */
 	public Image background;
-
+	/** 
+	 *   The creation of a "timer" object, time
+	 */
 	Timer time;
 	int v=225;
 
-	int i;
 
 	Thread animator;
 
 	boolean k = false;
 	boolean h = false;
 	boolean done = false;
-	boolean failure = false;
 
+	boolean failure = false;
+	/** 
+	 *   Variable holding the current x coordinate of the background image
+	 */
 	int backX;
 
-	int holes;
+
 	int[] holeStart;
 	int[] holeEnd;
+
+	int i;
 	final static int holeSize = 108;
-
-	final static int boxSize = 27;
-	final static int boxHeight = 27;
-	final static int boxWidth = 27;
-	int greenBox;
-	int[] greenBoxStart;
-	int[] greenBoxEnd;
-
-	int redBox;
+	int holes;
+	int redBoxes = 2;
 	int[] redBoxStart;
 	int[] redBoxEnd;
+	
+	
+	
+	
+	
+	static final int boxHeight = 27;  
+	static final int boxWidth = 27;
 
 
-	Path wall1 = Paths.get("Resources/Images/Levels/firstLevel.png");
-	Path level = Paths.get("Resources/LevelData/testLvl.txt");
+	Path wall1 = Paths.get("Images/Levels/firstLevel.png");
+	Path level = Paths.get("Images/Levels/Level1.txt");
 
 
 	/** 
@@ -61,57 +74,47 @@ public class Background extends JPanel implements ActionListener, Runnable {
 	 */
 	public Background() throws FileNotFoundException{
 		guy = new Character();
-
+		redBoxStart = new int[2];
+		redBoxEnd = new int[2];
+		redBoxStart[0] = 227;
+		redBoxStart[1] = 1873;
+		redBoxEnd[0] = 227+boxWidth;
+		redBoxEnd[1] = 1873 + boxWidth;
+		
+		
 		addKeyListener(new AL());
 		setFocusable(true);
 		ImageIcon i = new ImageIcon(wall1.toString());
 		background = i.getImage();
-
-		time = new Timer(1, this);
+		
+		time = new Timer(10, this);
 		time.start();
 
-		obstacleInit();
+		holeInit();
 	}
 
-	private void obstacleInit() throws FileNotFoundException{
+	private void holeInit() throws FileNotFoundException{
 		File file = new File(level.toString());    
 		Scanner scan = new Scanner(file);
 
 		int i=0;
+		
+		holes = scan.nextInt();
+		holeStart = new int[holes];
+		holeEnd = new int[holes];
 
-		if(scan.hasNext("hole")){
-			scan.next();
-			holes = scan.nextInt();
-			holeStart = new int[holes];
-			holeEnd = new int[holes];
-			for(i=0;i<holes;++i){
-				holeStart[i]=scan.nextInt();
-				holeEnd[i]=holeStart[i]+holeSize;
-			}
+		for(i=0;i<holes;++i){
+			holeStart[i]=scan.nextInt();
+			holeEnd[i]=holeStart[i]+holeSize;
 		}
-
-		if(scan.hasNext("green")){
-			scan.next();
-			greenBox = scan.nextInt();
-			greenBoxStart = new int[greenBox];
-			greenBoxEnd = new int[greenBox];
-			for(i=0;i<greenBox;++i){
-				greenBoxStart[i]=scan.nextInt();
-				greenBoxEnd[i]=greenBoxStart[i]+boxSize;
-			}
-		}
-
-		if(scan.hasNext("red")){
-			scan.next();
-			redBox = scan.nextInt();
-			redBoxStart = new int[redBox];
-			redBoxEnd = new int[redBox];
-			for(i=0;i<redBox;++i){
-				redBoxStart[i]=scan.nextInt();
-				redBoxEnd[i]=redBoxStart[i]+boxSize;
-			}
-		}
-
+		
+		/*redBoxes = scan.nextInt();
+		
+		for(i=0;i<redBoxes;++i){
+			redBoxStart[i]=scan.nextInt();
+			redBoxEnd[i]=holeStart[i]+boxWidth;
+		}*/
+		
 		scan.close();
 	}
 
@@ -131,11 +134,11 @@ public class Background extends JPanel implements ActionListener, Runnable {
 			
 		}
 		
-		/*for (i=0; i<2; i++) {
+		for (i=0; i<2; i++) {
 			redBoxStart[i] = redBoxStart[i]-1-guy.getdx();
 			redBoxEnd[i] = redBoxEnd[i]-1-guy.getdx();
 			
-		}*/
+		}
 		for (i=0; i<holes; i++) {
 			if (getX() >= holeStart[i]-50 && getX() <= holeEnd[i]-50 && v == 225) {
 				v = 440;
@@ -143,13 +146,13 @@ public class Background extends JPanel implements ActionListener, Runnable {
 
 			}
 		}
-/*		for (i=0; i<2; i++) {
+		for (i=0; i<2; i++) {
 			if (getX() >= redBoxStart[i]-50 && getX() <= redBoxEnd[i]-50 && v >= 225 - boxHeight) {
 				v = 440;
 				failure=true;
 
 			}
-		}*/
+		}
 		
 		
 		repaint();
