@@ -52,29 +52,31 @@ public class Background extends JPanel implements ActionListener, Runnable {
 
 
 	Path wall1 = Paths.get("Resources/Images/Levels/firstLevel.png");
-	Path level = Paths.get("Resources/LevelData/Level1.txt");
 
 
 	/** 
 	 *   Constructs the new Background object with a timer, a new character object, and an action listener
 	 * @throws FileNotFoundException 
 	 */
-	public Background() throws FileNotFoundException{
+	public Background(String name) throws FileNotFoundException{
 		guy = new Character();
-
-		addKeyListener(new AL());
+		
+		
 		setFocusable(true);
+		
+		addKeyListener(new AL());
+		
 		ImageIcon i = new ImageIcon(wall1.toString());
 		background = i.getImage();
 
-		time = new Timer(1, this);
+		time = new Timer(5, this);
 		time.start();
 
-		obstacleInit();
+		obstacleInit(name);
 	}
 
-	private void obstacleInit() throws FileNotFoundException{
-		File file = new File(level.toString());    
+	private void obstacleInit(String level) throws FileNotFoundException{
+		File file = new File(level);    
 		Scanner scan = new Scanner(file);
 
 		int i=0;
@@ -119,7 +121,7 @@ public class Background extends JPanel implements ActionListener, Runnable {
 	 *   Holds the methods that are performed every time the timer "ticks"
 	 */
 	public void actionPerformed(ActionEvent e){
-
+		requestFocus();
 		guy.move();
 
 
@@ -130,12 +132,11 @@ public class Background extends JPanel implements ActionListener, Runnable {
 			holeEnd[i] = holeEnd[i]-1-guy.getdx();
 			
 		}
-		
-/*		for (i=0; i<2; i++) {
+		for (i=0; i<redBox; i++) {
 			redBoxStart[i] = redBoxStart[i]-1-guy.getdx();
 			redBoxEnd[i] = redBoxEnd[i]-1-guy.getdx();
 			
-		}*/
+		}
 		for (i=0; i<holes; i++) {
 			if (getX() >= holeStart[i]-50 && getX() <= holeEnd[i]-50 && v == 225) {
 				v = 440;
@@ -143,13 +144,13 @@ public class Background extends JPanel implements ActionListener, Runnable {
 
 			}
 		}
-/*		for (i=0; i<2; i++) {
+		for (i=0; i<redBox; i++) {
 			if (getX() >= redBoxStart[i]-50 && getX() <= redBoxEnd[i]-50 && v >= 225 - boxHeight) {
 				v = 440;
 				failure=true;
 
 			}
-		}*/
+		}
 		
 		
 		repaint();
