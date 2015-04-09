@@ -52,8 +52,10 @@ public class Background extends JPanel implements ActionListener, Runnable {
 
 
 	Path wall1 = Paths.get("Resources/Images/Levels/firstLevel.png");
+	Path wall2 = Paths.get("Resources/Images/Levels/secondLevel.png");
 
-
+	int lvlID;
+	
 	/** 
 	 *   Constructs the new Background object with a timer, a new character object, and an action listener
 	 * @throws FileNotFoundException 
@@ -61,18 +63,26 @@ public class Background extends JPanel implements ActionListener, Runnable {
 	public Background(String name) throws FileNotFoundException{
 		guy = new Character();
 		
-		
-		setFocusable(true);
-		
 		addKeyListener(new AL());
 		
-		ImageIcon i = new ImageIcon(wall1.toString());
-		background = i.getImage();
+		
+		
 
 		time = new Timer(5, this);
 		time.start();
 
 		obstacleInit(name);
+		
+		ImageIcon i=null;
+		if(lvlID==1){
+			i = new ImageIcon(wall1.toString());
+		}
+		if(lvlID==2){
+			i = new ImageIcon(wall2.toString());
+		}
+		
+		background = i.getImage();
+		
 	}
 
 	private void obstacleInit(String level) throws FileNotFoundException{
@@ -80,7 +90,9 @@ public class Background extends JPanel implements ActionListener, Runnable {
 		Scanner scan = new Scanner(file);
 
 		int i=0;
-
+		
+		lvlID=scan.nextInt();
+		
 		if(scan.hasNext("hole")){
 			scan.next();
 			holes = scan.nextInt();
@@ -153,6 +165,16 @@ public class Background extends JPanel implements ActionListener, Runnable {
 		}
 		
 		
+		if(failure){
+			setFocusable(false);
+			time.stop();
+			try {
+				Frame.lvlEnd();
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
 		repaint();
 	}
 
@@ -171,9 +193,17 @@ public class Background extends JPanel implements ActionListener, Runnable {
 		super.paint(g);
 
 		Graphics2D g2d = (Graphics2D) g;
+		
 		g2d.drawImage(background, backX, 0, null);
 
 		g2d.drawImage(guy.getImage(), guy.getX(), v, null);
+		
+		if((guy.getX()+(backX*(-1)))>Frame.getScore()){
+			Frame.setScore((guy.getX()+(backX*(-1))));
+		}
+		
+		g2d.setFont(new Font("TimesRoman", Font.PLAIN, 25)); 
+		g2d.drawString("Your score: "+Frame.getScore(), 10, 25);
 
 	}
 

@@ -43,8 +43,10 @@ public class TitleScreen extends JPanel implements ActionListener{
 		kRelease = true;
 		selector = 148;
 		
-		addKeyListener(new Act());
 		setFocusable(true);
+		
+		addKeyListener(new Act());
+		
 		
 		
 		
@@ -55,7 +57,9 @@ public class TitleScreen extends JPanel implements ActionListener{
 		
 		think = new Timer(1, this);
 		think.start();
+		
 
+		requestFocus();
 
 	}
 
@@ -67,7 +71,7 @@ public class TitleScreen extends JPanel implements ActionListener{
 	
 	
 	public void actionPerformed(ActionEvent e){
-		
+		requestFocus();
 		repaint();
 	}
 
@@ -77,12 +81,18 @@ public class TitleScreen extends JPanel implements ActionListener{
 
 
 	public void paint(Graphics g){
-
+		requestFocus();
 		super.paint(g);
 
-		Graphics2D g3d = (Graphics2D) g;
-		g3d.drawImage(background, 0, 0, null);
-		g3d.drawImage(arrow, selector, 186, null);
+		Graphics2D g2d = (Graphics2D) g;
+		
+		g2d.drawImage(background, 0, 0, null);
+		g2d.drawImage(arrow, selector, 186, null);
+		
+		g2d.setFont(new Font("TimesRoman", Font.PLAIN, 25)); 
+		g2d.drawString("Your score: "+Frame.getScore(), 10, 25);
+		
+		
 
 	}
 
@@ -154,6 +164,7 @@ public class TitleScreen extends JPanel implements ActionListener{
 	
 	public void startLevel() throws FileNotFoundException{
 		setFocusable(false);
+		think.stop();
 		if(selector==148){ //Level1
 			Frame.lvlStart(lvl1.toString());
 		}
