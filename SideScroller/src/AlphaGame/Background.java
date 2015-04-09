@@ -5,11 +5,14 @@ package AlphaGame;
  */
 
 import java.awt.*;
+
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.*;
 import java.util.Scanner;
+import java.util.Date;
+
 
 import javax.swing.*;
 
@@ -49,50 +52,37 @@ public class Background extends JPanel implements ActionListener, Runnable {
 	int redBox;
 	int[] redBoxStart;
 	int[] redBoxEnd;
+	Date date = new Date();
 
 
 	Path wall1 = Paths.get("Resources/Images/Levels/firstLevel.png");
-	Path wall2 = Paths.get("Resources/Images/Levels/secondLevel.png");
+	Path level = Paths.get("Resources/LevelData/Level1.txt");
 
-	int lvlID;
-	
+
 	/** 
 	 *   Constructs the new Background object with a timer, a new character object, and an action listener
 	 * @throws FileNotFoundException 
 	 */
-	public Background(String name) throws FileNotFoundException{
+	public Background() throws FileNotFoundException{
 		guy = new Character();
-		
+
 		addKeyListener(new AL());
-		
-		
-		
+		setFocusable(true);
+		ImageIcon i = new ImageIcon(wall1.toString());
+		background = i.getImage();
 
 		time = new Timer(5, this);
 		time.start();
 
-		obstacleInit(name);
-		
-		ImageIcon i=null;
-		if(lvlID==1){
-			i = new ImageIcon(wall1.toString());
-		}
-		if(lvlID==2){
-			i = new ImageIcon(wall2.toString());
-		}
-		
-		background = i.getImage();
-		
+		obstacleInit();
 	}
 
-	private void obstacleInit(String level) throws FileNotFoundException{
-		File file = new File(level);    
+	private void obstacleInit() throws FileNotFoundException{
+		File file = new File(level.toString());    
 		Scanner scan = new Scanner(file);
 
 		int i=0;
-		
-		lvlID=scan.nextInt();
-		
+
 		if(scan.hasNext("hole")){
 			scan.next();
 			holes = scan.nextInt();
@@ -133,7 +123,7 @@ public class Background extends JPanel implements ActionListener, Runnable {
 	 *   Holds the methods that are performed every time the timer "ticks"
 	 */
 	public void actionPerformed(ActionEvent e){
-		requestFocus();
+
 		guy.move();
 
 
@@ -144,11 +134,21 @@ public class Background extends JPanel implements ActionListener, Runnable {
 			holeEnd[i] = holeEnd[i]-1-guy.getdx();
 			
 		}
+		
 		for (i=0; i<redBox; i++) {
 			redBoxStart[i] = redBoxStart[i]-1-guy.getdx();
 			redBoxEnd[i] = redBoxEnd[i]-1-guy.getdx();
 			
 		}
+		
+		for (i=0; i<greenBox; i++) {
+			greenBoxStart[i] = greenBoxStart[i]-1-guy.getdx();
+			greenBoxEnd[i] = greenBoxEnd[i]-1-guy.getdx();
+			
+		}
+		
+		
+		
 		for (i=0; i<holes; i++) {
 			if (getX() >= holeStart[i]-50 && getX() <= holeEnd[i]-50 && v == 225) {
 				v = 440;
@@ -164,16 +164,25 @@ public class Background extends JPanel implements ActionListener, Runnable {
 			}
 		}
 		
-		
-		if(failure){
-			setFocusable(false);
-			time.stop();
-			try {
-				Frame.lvlEnd();
-			} catch (FileNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+		for (i=0; i<greenBox; i++) {
+			long time = date.getTime();
+			boolean isStuck = false;
+			int box = 0;
+			if (getX() >= greenBoxStart[i]-50 && getX() <= greenBoxEnd[i]-50) {
+				if(!isStuck)
+					box = i;
+				
+				isStuck = true;
+				guy.moveTo(greenBoxStart[box]);
+				
+				
+
 			}
+			else isStuck = false;
+		}
+		if (getX() < 0) {
+			failure = true;
+			v=440;
 		}
 		repaint();
 	}
@@ -193,17 +202,9 @@ public class Background extends JPanel implements ActionListener, Runnable {
 		super.paint(g);
 
 		Graphics2D g2d = (Graphics2D) g;
-		
 		g2d.drawImage(background, backX, 0, null);
 
 		g2d.drawImage(guy.getImage(), guy.getX(), v, null);
-		
-		if((guy.getX()+(backX*(-1)))>Frame.getScore()){
-			Frame.setScore((guy.getX()+(backX*(-1))));
-		}
-		
-		g2d.setFont(new Font("TimesRoman", Font.PLAIN, 25)); 
-		g2d.drawString("Your score: "+Frame.getScore(), 10, 25);
 
 	}
 
@@ -247,19 +248,20 @@ public class Background extends JPanel implements ActionListener, Runnable {
 
 	public void cycle(){
 		if (!h){
-			v--;
+			v = v - 2;
 		}
 
-		if(v==175){
+		if(v==125){
 			h = true;
 
 		}
 		if(h && v<=225){
-			v++;
+			v= v+4;
 			if(v==225){
 				done = true;
 				guy.still = guy.i.getImage();
 			}
 		}
 	}
+	
 }
