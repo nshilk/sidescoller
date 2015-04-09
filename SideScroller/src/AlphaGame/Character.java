@@ -62,7 +62,11 @@ public class Character {
 		x = x+dx;
 
 	}
-
+	
+	public void moveTo(int n) {
+		dx--;
+	
+	}
 	/**
 	 * 	Returns the current value of x
 	 * @return x
@@ -96,7 +100,6 @@ public class Character {
 	 * 	Changes the value of dx (change in x) when a key is pressed
 	 */
 	public void keyPressed(KeyEvent e){
-		
 		int key = e.getKeyCode();
 
 		if(key == KeyEvent.VK_LEFT){
