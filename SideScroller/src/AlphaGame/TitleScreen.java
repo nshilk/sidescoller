@@ -177,7 +177,4 @@ public class TitleScreen extends JPanel implements ActionListener{
 		
 	}
 
-	
-
-
 }

@@ -65,15 +65,14 @@ public class Background extends JPanel implements ActionListener, Runnable {
 		
 		addKeyListener(new AL());
 		
-		
-		
-
 		time = new Timer(5, this);
 		time.start();
 
 		obstacleInit(name);
 		
 		ImageIcon i=null;
+		
+		
 		if(lvlID==1){
 			i = new ImageIcon(wall1.toString());
 		}
