@@ -63,6 +63,10 @@ public class Background extends JPanel implements ActionListener, Runnable {
 	Date date = new Date();
 	
 	boolean stuck;
+	
+	int startingHeight;
+	
+	int landingHeight;
 
 	/** 
 	 *   Constructs the new Background object with a timer, a new character object, and an action listener
@@ -90,6 +94,8 @@ public class Background extends JPanel implements ActionListener, Runnable {
 
 		background = i.getImage();
 		stuck=false;
+		landingHeight=225;
+		startingHeight=225;
 
 	}
 
@@ -177,19 +183,34 @@ public class Background extends JPanel implements ActionListener, Runnable {
 
 			}
 		}
+		boolean otherStuck= false;
+		boolean withinBox = false;
 		
 		for (i=0; i<greenBox; i++) {
 
-			if (v>225-boxHeight&&getX() >= greenBoxStart[i]-50 &&getX() <= greenBoxEnd[i]-50) {	
-				stuck=true;
+			if (getX() >= greenBoxStart[i]-50 &&getX() <= greenBoxEnd[i]-50) {	
+				landingHeight= 225-boxHeight;
+				withinBox=true;
+				if (v >= 225) {
+				otherStuck = true;
+				guy.setStuck(true);
 				guy.setdx(-1);
-				
+				}
+				else{
+					guy.setStuck(false);
+					
+				}
 				
 			}
-			
-			
+			else if(!otherStuck){
+				guy.setStuck(false);
+			}
+			else {
+				landingHeight = 225;
+			}
 			
 		}
+		otherStuck = false;
 		
 		
 		if (getX() < 0) {
@@ -259,7 +280,7 @@ public class Background extends JPanel implements ActionListener, Runnable {
 		beforeTime = System.currentTimeMillis();
 		while(!done){
 
-			cycle();
+			cycle(startingHeight, landingHeight);
 
 			timeDiff = System.currentTimeMillis()-beforeTime;
 			sleep = 10 - timeDiff;
@@ -279,18 +300,18 @@ public class Background extends JPanel implements ActionListener, Runnable {
 	}
 
 
-	public void cycle(){
+	public void cycle(int start, int land){
 		if (!h){
 			v-=1;
 		}
 
-		if(v==175){
+		if(v==start-50){
 			h = true;
 
 		}
-		if(h && v<=225){
+		if(h && v<=land){
 			v++;
-			if(v==225){
+			if(v==land){
 				done = true;
 				guy.still = guy.i.getImage();
 			}

@@ -28,6 +28,8 @@ public class Character {
 	int dy;
 
 	int left;
+	
+	boolean stuck;
 
 
 
@@ -53,6 +55,7 @@ public class Character {
 		
 		left = 150;
 		y = 250;
+		stuck = false;
 	}
 
 	/**
@@ -100,6 +103,13 @@ public class Character {
 	
 	}
 	
+	
+	public boolean getStuck(){
+		return stuck;
+	}
+	public void setStuck(boolean set){
+		stuck = set;
+	}
 
 	/**
 	 * @param e
@@ -110,10 +120,21 @@ public class Character {
 		int key = e.getKeyCode();
 
 		if(key == KeyEvent.VK_LEFT){
-			dx = -1;
+			if(!stuck){
+				dx = -1;
+			}
+			else if(stuck){
+				dx = -2;
+			}
+			
+			
 		}
 		if(key == KeyEvent.VK_RIGHT){
-			dx = 1;
+			
+			if(!stuck){
+				dx = 1;
+			}
+			
 		}
 		if(key == KeyEvent.VK_UP){
 			dy = 1;

@@ -63,8 +63,6 @@ public class Frame {
 	}
 	public static void main(String[] args) throws FileNotFoundException{
 		
-		
-		
 		Frame game =new Frame();
 		
 		
