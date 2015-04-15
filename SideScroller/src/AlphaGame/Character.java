@@ -124,7 +124,7 @@ public class Character {
 				dx = -1;
 			}
 			else if(stuck){
-				dx = -2;
+				dx = -3;
 			}
 			
 			

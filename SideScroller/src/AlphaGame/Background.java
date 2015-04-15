@@ -55,6 +55,7 @@ public class Background extends JPanel implements ActionListener, Runnable {
 
 	Path wall1 = Paths.get("Resources/Images/Levels/firstLevel.png");
 	Path wall2 = Paths.get("Resources/Images/Levels/secondLevel.png");
+	Path wall3 = Paths.get("Resources/Images/Levels/thirdLevel.png");
 
 	int lvlID;
 	
@@ -90,6 +91,9 @@ public class Background extends JPanel implements ActionListener, Runnable {
 		}
 		if(lvlID==2){
 			i = new ImageIcon(wall2.toString());
+		}
+		if(lvlID==3){
+			i = new ImageIcon(wall3.toString());
 		}
 
 		background = i.getImage();
@@ -309,15 +313,15 @@ public class Background extends JPanel implements ActionListener, Runnable {
 
 	public void cycle(int start, int land){
 		if (!h){
-			v-=1;
+			v-=2;
 		}
 
-		if(v==start-50){
+		if(v==start-80){
 			h = true;
 
 		}
 		if(h && v<=land){
-			v++;
+			v+=2;
 			if(v==land){
 				done = true;
 				guy.still = guy.i.getImage();
