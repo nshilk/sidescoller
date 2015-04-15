@@ -82,6 +82,10 @@ public class Character {
 	public int getdx(){
 		return dx;
 	}
+	
+	public void setdx(int i){
+		dx=i;
+	}
 
 	/**
 	 * 	Returns the current image of the character
@@ -90,6 +94,12 @@ public class Character {
 	public Image getImage(){
 		return still;
 	}
+	
+	public void moveTo(int n) {
+		x=n;
+	
+	}
+	
 
 	/**
 	 * @param e

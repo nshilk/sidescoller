@@ -13,6 +13,8 @@ import java.util.Scanner;
 
 import javax.swing.*;
 
+import java.util.Date;
+
 public class Background extends JPanel implements ActionListener, Runnable {
 
 	private static final long serialVersionUID = 1L;
@@ -56,32 +58,39 @@ public class Background extends JPanel implements ActionListener, Runnable {
 
 	int lvlID;
 	
+	int tick = 5;
+
+	Date date = new Date();
+	
+	boolean stuck;
+
 	/** 
 	 *   Constructs the new Background object with a timer, a new character object, and an action listener
 	 * @throws FileNotFoundException 
 	 */
 	public Background(String name) throws FileNotFoundException{
 		guy = new Character();
-		
+
 		addKeyListener(new AL());
-		
-		time = new Timer(5, this);
+
+		time = new Timer(tick, this);
 		time.start();
 
 		obstacleInit(name);
-		
+
 		ImageIcon i=null;
-		
-		
+
+
 		if(lvlID==1){
 			i = new ImageIcon(wall1.toString());
 		}
 		if(lvlID==2){
 			i = new ImageIcon(wall2.toString());
 		}
-		
+
 		background = i.getImage();
-		
+		stuck=false;
+
 	}
 
 	private void obstacleInit(String level) throws FileNotFoundException{
@@ -89,9 +98,9 @@ public class Background extends JPanel implements ActionListener, Runnable {
 		Scanner scan = new Scanner(file);
 
 		int i=0;
-		
+
 		lvlID=scan.nextInt();
-		
+
 		if(scan.hasNext("hole")){
 			scan.next();
 			holes = scan.nextInt();
@@ -135,19 +144,25 @@ public class Background extends JPanel implements ActionListener, Runnable {
 		requestFocus();
 		guy.move();
 
-
 		backX = backX - 1;
 
 		for (i=0; i<holes; i++) {
 			holeStart[i] = holeStart[i]-1-guy.getdx();
 			holeEnd[i] = holeEnd[i]-1-guy.getdx();
-			
+
 		}
 		for (i=0; i<redBox; i++) {
 			redBoxStart[i] = redBoxStart[i]-1-guy.getdx();
 			redBoxEnd[i] = redBoxEnd[i]-1-guy.getdx();
-			
 		}
+
+
+		for (i=0; i<greenBox; i++) {
+			greenBoxStart[i] = greenBoxStart[i]-1-guy.getdx();
+			greenBoxEnd[i] = greenBoxEnd[i]-1-guy.getdx();
+		}
+
+
 		for (i=0; i<holes; i++) {
 			if (getX() >= holeStart[i]-50 && getX() <= holeEnd[i]-50 && v == 225) {
 				v = 440;
@@ -156,14 +171,34 @@ public class Background extends JPanel implements ActionListener, Runnable {
 			}
 		}
 		for (i=0; i<redBox; i++) {
-			if (getX() >= redBoxStart[i]-50 && getX() <= redBoxEnd[i]-50 && v >= 225 - boxHeight) {
+			if (getX() >= redBoxStart[i]-50 && getX() <= redBoxEnd[i]-50 && v >= 220 - boxHeight) {
 				v = 440;
 				failure=true;
 
 			}
 		}
 		
+		for (i=0; i<greenBox; i++) {
+
+			if (v>225-boxHeight&&getX() >= greenBoxStart[i]-50 &&getX() <= greenBoxEnd[i]-50) {	
+				stuck=true;
+				guy.setdx(-1);
+				
+				
+			}
+			
+			
+			
+		}
 		
+		
+		if (getX() < 0) {
+			failure = true;
+			v=440;
+		}
+
+
+
 		if(failure){
 			setFocusable(false);
 			time.stop();
@@ -192,15 +227,15 @@ public class Background extends JPanel implements ActionListener, Runnable {
 		super.paint(g);
 
 		Graphics2D g2d = (Graphics2D) g;
-		
+
 		g2d.drawImage(background, backX, 0, null);
 
 		g2d.drawImage(guy.getImage(), guy.getX(), v, null);
-		
+
 		if((guy.getX()+(backX*(-1)))>Frame.getScore()){
 			Frame.setScore((guy.getX()+(backX*(-1))));
 		}
-		
+
 		g2d.setFont(new Font("TimesRoman", Font.PLAIN, 25)); 
 		g2d.drawString("Your score: "+Frame.getScore(), 10, 25);
 
@@ -246,7 +281,7 @@ public class Background extends JPanel implements ActionListener, Runnable {
 
 	public void cycle(){
 		if (!h){
-			v--;
+			v-=1;
 		}
 
 		if(v==175){
