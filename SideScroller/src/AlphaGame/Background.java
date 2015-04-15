@@ -191,6 +191,8 @@ public class Background extends JPanel implements ActionListener, Runnable {
 			if (getX() >= greenBoxStart[i]-50 &&getX() <= greenBoxEnd[i]-50) {	
 				landingHeight= 225-boxHeight;
 				withinBox=true;
+				
+				
 				if (v >= 225) {
 				otherStuck = true;
 				guy.setStuck(true);
@@ -202,15 +204,20 @@ public class Background extends JPanel implements ActionListener, Runnable {
 				}
 				
 			}
-			else if(!otherStuck){
+			if(!otherStuck){
 				guy.setStuck(false);
 			}
-			else {
+			if(!withinBox){
 				landingHeight = 225;
+				if(done){
+					v=landingHeight;
+				}
+				
 			}
 			
 		}
 		otherStuck = false;
+		withinBox=false;
 		
 		
 		if (getX() < 0) {
