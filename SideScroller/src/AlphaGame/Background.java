@@ -100,6 +100,7 @@ public class Background extends JPanel implements ActionListener, Runnable {
 		stuck=false;
 		landingHeight=225;
 		startingHeight=225;
+		backX=0;
 
 	}
 
@@ -154,6 +155,7 @@ public class Background extends JPanel implements ActionListener, Runnable {
 		requestFocus();
 		guy.move();
 
+		if(backX!=-3500)
 		backX = backX - 1;
 
 		for (i=0; i<holes; i++) {
@@ -173,20 +175,20 @@ public class Background extends JPanel implements ActionListener, Runnable {
 		}
 
 
-		for (i=0; i<holes; i++) {
-			if (getX() >= holeStart[i]-50 && getX() <= holeEnd[i]-50 && v == 225) {
-				v = 440;
-				failure=true;
-
-			}
-		}
-		for (i=0; i<redBox; i++) {
-			if (getX() >= redBoxStart[i]-50 && getX() <= redBoxEnd[i]-50 && v >= 220 - boxHeight) {
-				v = 440;
-				failure=true;
-
-			}
-		}
+//		for (i=0; i<holes; i++) {
+//			if (getX() >= holeStart[i]-50 && getX() <= holeEnd[i]-50 && v == 225) {
+//				v = 440;
+//				failure=true;
+//
+//			}
+//		}
+//		for (i=0; i<redBox; i++) {
+//			if (getX() >= redBoxStart[i]-50 && getX() <= redBoxEnd[i]-50 && v >= 220 - boxHeight) {
+//				v = 440;
+//				failure=true;
+//			}
+//		}
+		
 		boolean otherStuck= false;
 		boolean withinBox = false;
 		
@@ -210,6 +212,10 @@ public class Background extends JPanel implements ActionListener, Runnable {
 			}
 			if(!otherStuck){
 				guy.setStuck(false);
+			}else{
+				if(guy.getX()<0){
+					failure=true;
+				}
 			}
 			if(!withinBox){
 				landingHeight = 225;
@@ -224,12 +230,19 @@ public class Background extends JPanel implements ActionListener, Runnable {
 		withinBox=false;
 		
 		
-		if (getX() < 0) {
-			failure = true;
-			v=440;
+//		if (getX() < 0) {
+//			failure = true;
+//			v=440;
+//		}
+
+		
+//		if(guy.getX()<0||guy.getX()>800){
+//			failure=true;
+//		}
+		
+		if(guy.getX()<0||guy.getX()>700){
+			guy.setdx(0);
 		}
-
-
 
 		if(failure){
 			setFocusable(false);
@@ -241,6 +254,10 @@ public class Background extends JPanel implements ActionListener, Runnable {
 				e1.printStackTrace();
 			}
 		}
+		
+		
+
+		
 		repaint();
 	}
 
@@ -250,6 +267,7 @@ public class Background extends JPanel implements ActionListener, Runnable {
 
 
 	public void paint(Graphics g){
+		
 		if(guy.dy == 1 && !k &&!failure){
 			k = true;
 			animator = new Thread(this);
