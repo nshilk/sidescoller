@@ -20,6 +20,10 @@ public class Frame {
 	static Background level;
 	
 	static int maxScore;
+	
+	static boolean f1=false;
+	static boolean f2=false;
+	static boolean f3=false;
 
 	public Frame() throws FileNotFoundException{
 		maxScore=0;

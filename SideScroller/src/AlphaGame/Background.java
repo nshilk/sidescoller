@@ -68,6 +68,7 @@ public class Background extends JPanel implements ActionListener, Runnable {
 	int startingHeight;
 	
 	int landingHeight;
+	
 
 	/** 
 	 *   Constructs the new Background object with a timer, a new character object, and an action listener
@@ -155,12 +156,30 @@ public class Background extends JPanel implements ActionListener, Runnable {
 		requestFocus();
 		guy.move();
 
-		if(backX!=-3500)
-		backX = backX - 1;
+		if(backX!=-3500){
+			backX = backX - 1;
+		}else if(guy.getX()>393-50){
+			failure=true;
+			
+			if(lvlID==1){
+				Frame.f1=true;
+			}
+			if(lvlID==2){
+				Frame.f2=true;
+			}
+			if(lvlID==3){
+				Frame.f3=true;
+			}
+			
+		}
+		
+		
 
 		for (i=0; i<holes; i++) {
 			holeStart[i] = holeStart[i]-1-guy.getdx();
 			holeEnd[i] = holeEnd[i]-1-guy.getdx();
+			
+			
 
 		}
 		for (i=0; i<redBox; i++) {
@@ -175,19 +194,19 @@ public class Background extends JPanel implements ActionListener, Runnable {
 		}
 
 
-//		for (i=0; i<holes; i++) {
-//			if (getX() >= holeStart[i]-50 && getX() <= holeEnd[i]-50 && v == 225) {
-//				v = 440;
-//				failure=true;
-//
-//			}
-//		}
-//		for (i=0; i<redBox; i++) {
-//			if (getX() >= redBoxStart[i]-50 && getX() <= redBoxEnd[i]-50 && v >= 220 - boxHeight) {
-//				v = 440;
-//				failure=true;
-//			}
-//		}
+		for (i=0; i<holes; i++) {
+			if (getX() >= holeStart[i]-50 && getX() <= holeEnd[i]-50 && v == 225) {
+				v = 440;
+				failure=true;
+
+			}
+		}
+		for (i=0; i<redBox; i++) {
+			if (getX() >= redBoxStart[i]-50 && getX() <= redBoxEnd[i]-50 && v >= 220 - boxHeight) {
+				v = 440;
+				failure=true;
+			}
+		}
 		
 		boolean otherStuck= false;
 		boolean withinBox = false;
@@ -230,19 +249,10 @@ public class Background extends JPanel implements ActionListener, Runnable {
 		withinBox=false;
 		
 		
-//		if (getX() < 0) {
-//			failure = true;
-//			v=440;
-//		}
-
-		
-//		if(guy.getX()<0||guy.getX()>800){
-//			failure=true;
-//		}
-		
 		if(guy.getX()<0||guy.getX()>700){
 			guy.setdx(0);
 		}
+		
 
 		if(failure){
 			setFocusable(false);
@@ -282,9 +292,9 @@ public class Background extends JPanel implements ActionListener, Runnable {
 
 		g2d.drawImage(guy.getImage(), guy.getX(), v, null);
 
-		if((guy.getX()+(backX*(-1)))>Frame.getScore()){
-			Frame.setScore((guy.getX()+(backX*(-1))));
-		}
+		//if((guy.getX()+(backX*(-1)))>Frame.getScore()){
+			Frame.setScore(lvlID*(guy.getX()+(backX*(-1))));
+		//}
 
 		g2d.setFont(new Font("TimesRoman", Font.PLAIN, 25)); 
 		g2d.drawString("Your score: "+Frame.getScore(), 10, 25);

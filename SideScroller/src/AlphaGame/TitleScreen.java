@@ -6,6 +6,8 @@ package AlphaGame;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.GeneralPath;
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.*;
@@ -19,9 +21,11 @@ public class TitleScreen extends JPanel implements ActionListener{
 
 	private Image background;
 	private Image arrow;
+	private Image star;
 
 	Path title = Paths.get("Resources/Images/Title/TitleScreen.png");
 	Path pointer = Paths.get("Resources/Images/Title/arrow.png");
+	Path starpa = Paths.get("Resources/Images/Title/star.png");
 	
 	
 	Path lvl1 = Paths.get("Resources/LevelData/Level1.txt");
@@ -54,6 +58,8 @@ public class TitleScreen extends JPanel implements ActionListener{
 		background = i.getImage();
 		ImageIcon j = new ImageIcon(pointer.toString());
 		arrow = j.getImage();
+		ImageIcon k = new ImageIcon(starpa.toString());
+		star = k.getImage();
 		
 		think = new Timer(1, this);
 		think.start();
@@ -91,6 +97,17 @@ public class TitleScreen extends JPanel implements ActionListener{
 		
 		g2d.setFont(new Font("TimesRoman", Font.PLAIN, 25)); 
 		g2d.drawString("Your score: "+Frame.getScore(), 10, 25);
+		
+		
+		if(Frame.f1==true){
+			g2d.drawImage(star,118,216,null);
+		}
+		if(Frame.f2==true){
+			g2d.drawImage(star,332,216,null);
+		}
+		if(Frame.f3==true){
+			g2d.drawImage(star,546,216,null);
+		}
 		
 		
 
